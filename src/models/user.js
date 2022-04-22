@@ -5,26 +5,26 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class Company extends Model {
+  class User extends Model {
     
     static associate(models) {
-
-      Company.hasMany(models.User, {
+      
+      User.belongsTo(models.Company, {
         foreignKey: 'company_id',
-        as: 'users'
+        as: 'company'
       })
-
+      
     }
 
   }
-  Company.init({
+  User.init({
     name: DataTypes.STRING,
-    cnpj: DataTypes.STRING,
-    logo: DataTypes.BLOB('long')
+    email: DataTypes.STRING,
+    password: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'Company',
-    tableName: 'companies',
+    modelName: 'User',
+    tableName: 'users',
   });
-  return Company;
+  return User;
 };
