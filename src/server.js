@@ -9,6 +9,9 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+const companyRoute = require('./routes/company.routes');
+app.use('/companies', companyRoute);
+
 app.listen(port, async () => {
     try {
         await db.sequelize.authenticate();
