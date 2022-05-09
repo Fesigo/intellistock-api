@@ -2,6 +2,7 @@ const db = require('../models');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const { deleteFile } = require('../utils/file');
+const { response } = require('express');
 
 class CompanyController {
 
@@ -86,6 +87,35 @@ class CompanyController {
 
             return res.status(201).json(result);
 
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async update(req, res) {
+        try {
+
+            const { id } = req.params;
+            const { name, cnpj } = req.body;
+
+            if (!name || !cnpj) {
+                return res.status(400).json({ message: 'Missing Company fields' });
+            }
+
+            const company = await db.Company.findByPk(id);
+            if (!company) {
+                return res.status(404).json({ message: `Company not found! Id: ${id}` });
+            }
+
+            const updateCompany = await company.update({
+                name,
+                cnpj
+            })
+
+            updateCompany.logo = undefined;
+
+            return res.status(200).json(updateCompany);
+            
         } catch (error) {
             return res.status(500).json({ message: error.message });
         }
