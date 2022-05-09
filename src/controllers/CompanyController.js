@@ -11,6 +11,8 @@ class CompanyController {
 
             const companies = await db.Company.findAll();
 
+            companies.map(company => company.logo = undefined);
+
             return res.status(200).json(companies);
 
         } catch (error) {
@@ -26,8 +28,10 @@ class CompanyController {
 
             const company = await db.Company.findByPk(id);
             if (!company) {
-                return res.status(404).json({ message: `Company not found! Id: ${id}` })
+                return res.status(404).json({ message: `Company not found! Id: ${id}` });
             }
+
+            company.logo = company.logo ? Buffer.from(company.logo).toString('ascii') : null;
 
             return res.status(200).json(company);
 

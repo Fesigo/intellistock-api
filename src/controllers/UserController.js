@@ -8,6 +8,8 @@ class UserController {
 
             const users = await db.User.findAll();
 
+            users.map(user => user.password = undefined);
+
             return res.status(200).json(users);
 
         } catch (error) {
@@ -23,8 +25,10 @@ class UserController {
 
             const user = await db.User.findByPk(id);
             if (!user) {
-                return res.status(404).json({ message: `User not found! Id: ${id}` })
+                return res.status(404).json({ message: `User not found! Id: ${id}` });
             }
+
+            user.password = undefined;
 
             return res.status(200).json(user);
 
