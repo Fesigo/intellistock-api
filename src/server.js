@@ -12,6 +12,9 @@ app.use(express.json());
 const companyRoute = require('./routes/company.routes');
 app.use('/companies', companyRoute);
 
+const userRoute = require('./routes/user.routes');
+app.use('/users', userRoute);
+
 app.listen(port, async () => {
     try {
         await db.sequelize.authenticate();
