@@ -2,7 +2,6 @@ const db = require('../models');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const { deleteFile } = require('../utils/file');
-const { response } = require('express');
 
 class CompanyController {
 
@@ -107,14 +106,14 @@ class CompanyController {
                 return res.status(404).json({ message: `Company not found! Id: ${id}` });
             }
 
-            const updateCompany = await company.update({
+            const updatedCompany = await company.update({
                 name,
                 cnpj
             })
 
-            updateCompany.logo = undefined;
+            updatedCompany.logo = undefined;
 
-            return res.status(200).json(updateCompany);
+            return res.status(200).json(updatedCompany);
             
         } catch (error) {
             return res.status(500).json({ message: error.message });

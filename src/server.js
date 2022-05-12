@@ -15,6 +15,9 @@ app.use('/companies', companyRoute);
 const userRoute = require('./routes/user.routes');
 app.use('/users', userRoute);
 
+const categoryRoute = require('./routes/category.routes');
+app.use('/categories', categoryRoute);
+
 app.listen(port, async () => {
     try {
         await db.sequelize.authenticate();
