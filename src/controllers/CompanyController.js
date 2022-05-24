@@ -45,12 +45,6 @@ class CompanyController {
         try {
 
             const { user: newUser, company: newCompany } = req.body;
-            const logo = req.file;
-
-            const base64 = logo ? Buffer.from(fs.readFileSync(logo.path)).toString('base64') : null;
-            if (logo) {
-                deleteFile(`src/assets/images/companies/${logo.filename}`);
-            }
 
             if (!newUser || !newUser.name || !newUser.email || !newUser.password) {
                 return res.status(400).json({ message: 'Missing User fields' });
@@ -67,7 +61,7 @@ class CompanyController {
                 const company = await db.Company.create({
                     name: newCompany.name,
                     cnpj: newCompany.cnpj,
-                    logo: base64
+                    logo: null
                 }, { transaction: t });
 
                 const user = await db.User.create({
@@ -114,6 +108,33 @@ class CompanyController {
             updatedCompany.logo = undefined;
 
             return res.status(200).json(updatedCompany);
+            
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
+    static async updateLogo(req, res) {
+        try {
+
+            const { id } = req.params;
+            const logo = req.file;
+
+            const base64 = logo ? Buffer.from(fs.readFileSync(logo.path)).toString('base64') : null;
+            if (logo) {
+                deleteFile(`src/assets/images/companies/${logo.filename}`);
+            }
+
+            const company = await db.Company.findByPk(id);
+            if (!company) {
+                return res.status(404).json({ message: `Company not found! Id: ${id}` });
+            }
+
+            await company.update({
+                logo: base64
+            })
+
+            return res.status(204).json();
             
         } catch (error) {
             return res.status(500).json({ message: error.message });

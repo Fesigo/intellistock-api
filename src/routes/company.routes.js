@@ -7,11 +7,13 @@ const { upload } = require('../config/uploadConfig');
 const companyRoute = Router();
 const uploadImage = multer(upload('./assets/images/companies'));
 
+companyRoute.post('/', CompanyController.create);
+
 companyRoute.use(auth);
 
 companyRoute.get('/', CompanyController.findAll);
 companyRoute.get('/:id', CompanyController.find);
-companyRoute.post('/', uploadImage.single('logo'), CompanyController.create);
 companyRoute.put('/:id', CompanyController.update);
+companyRoute.patch('/:id', uploadImage.single('logo'), CompanyController.updateLogo);
 
 module.exports = companyRoute;
