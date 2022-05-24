@@ -7,6 +7,7 @@ const productRoute = Router();
 productRoute.use(auth);
 
 productRoute.get('/', ProductController.findAll);
+productRoute.get('/:id', ProductController.find);
 productRoute.get('/company/:company_id/category/:category_id', ProductController.findByCompanyAndCategory);
 productRoute.post('/company/:company_id/category/:category_id', ProductController.create);
 productRoute.put('/:id/category/:category_id', ProductController.update);
