@@ -33,6 +33,34 @@ class ProductController {
         }
     }
 
+    // Retrieve a Product by Company Id from the database.
+    static async findByCompany(req, res) {
+        try {
+
+            const { company_id } = req.params;
+
+            const company = await db.Company.findOne({
+                where: { id: company_id },
+                attributes: ['id', 'name'],
+                include: [
+                    {
+                        model: db.Product,
+                        as: 'products',
+                        attributes: ['id', 'name', 'company_id']
+                    }
+                ]
+            });
+            if (!company) {
+                return res.status(404).json({ message: `Company not found! Id: ${company_id}` });
+            }
+
+            return res.status(200).json(company);
+            
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
     // Retrieve a Product by Company Id and Category Id from the database.
     static async findByCompanyAndCategory(req, res) {
         try {
@@ -52,6 +80,7 @@ class ProductController {
                         model: db.Product,
                         as: 'products',
                         where: { company_id },
+                        required: false,
                         attributes: ['id', 'name', 'company_id'],
                     }
                 ]
