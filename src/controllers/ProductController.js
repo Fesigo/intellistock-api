@@ -46,7 +46,7 @@ class ProductController {
                     {
                         model: db.Product,
                         as: 'products',
-                        attributes: ['id', 'name', 'company_id']
+                        attributes: ['id', 'name', 'amount', 'company_id']
                     }
                 ]
             });
@@ -81,7 +81,7 @@ class ProductController {
                         as: 'products',
                         where: { company_id },
                         required: false,
-                        attributes: ['id', 'name', 'company_id'],
+                        attributes: ['id', 'name', 'amount', 'company_id'],
                     }
                 ]
             });
