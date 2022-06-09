@@ -67,6 +67,36 @@ class UserController {
         }
     }
 
+    // Update a User from the database.
+    static async update(req, res) {
+        try {
+
+            const { id } = req.params;
+            const { name, email } = req.body;
+
+            if (!name || !email) {
+                return res.status(400).json({ message: 'Missing User fields. Check name or email.' });
+            }
+
+            const user = await db.User.findByPk(id);
+            if (!user) {
+                return res.status(404).json({ message: `User not found! Id: ${id}` });
+            }
+
+            await user.update({
+                name,
+                email
+            })
+
+            user.password = undefined;
+
+            return res.status(200).json(user);
+            
+        } catch (error) {
+            return res.status(500).json({ message: error.message });
+        }
+    }
+
 }
 
 module.exports = UserController;

@@ -10,5 +10,6 @@ userRoute.use(auth);
 
 userRoute.get('/', UserController.findAll);
 userRoute.get('/:id', UserController.find);
+userRoute.put('/:id', UserController.update);
 
 module.exports = userRoute;
